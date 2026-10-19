@@ -21,6 +21,20 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#netWorthChart[data-time-series-chart-selectable-value='true'][draggable='false']"
   end
 
+  test "dashboard renders the balance sheet expand-all toggle the inline script keys off" do
+    get root_path
+
+    assert_response :ok
+    expand_label = I18n.t("pages.dashboard.balance_sheet.expand_all")
+    collapse_label = I18n.t("pages.dashboard.balance_sheet.collapse_all")
+    assert_select "section[data-section-key='balance_sheet'] button[type='button'][data-balance-sheet-expand-all]" \
+                  "[data-expand-label='#{expand_label}'][data-collapse-label='#{collapse_label}']" \
+                  "[aria-expanded='false'][aria-label='#{expand_label}']" do
+      assert_select "[data-icon='expand']"
+      assert_select "[data-icon='collapse'][style='display:none']"
+    end
+  end
+
   test "dashboard has no chat sidebar or toggle when the assistant type is mcp_only" do
     get root_path
     assert_select "#chat-container", count: 1

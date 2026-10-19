@@ -48,4 +48,24 @@ class DS::ExpandToggleTest < ViewComponent::TestCase
 
     assert_selector "button.shrink-0.border.border-primary.bg-container.text-primary"
   end
+
+  test "ghost variant renders the borderless header-cluster style with 14px icons" do
+    render_inline(DS::ExpandToggle.new(
+      variant: :ghost,
+      expand_label: "Expand all",
+      collapse_label: "Collapse all",
+      data: { balance_sheet_expand_all: true },
+      class_name: "opacity-0"
+    ))
+
+    assert_selector "button[data-balance-sheet-expand-all].w-6.h-6.rounded-md.text-secondary.opacity-0"
+    assert_no_selector "button.border"
+    assert_selector "button [data-icon='expand'] svg.\\!w-3\\.5"
+  end
+
+  test "rejects an unknown variant" do
+    assert_raises(ArgumentError) do
+      DS::ExpandToggle.new(variant: :bogus, expand_label: "a", collapse_label: "b", data: {})
+    end
+  end
 end
