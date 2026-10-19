@@ -87,7 +87,8 @@ class Settings::ProvidersTest < ApplicationSystemTestCase
       assert_text "US / UK"
       assert_text "Bank"
       assert_button "App Store", disabled: true
-      assert_selector '[title="Coming soon!"]'
+      find("[tabindex='0'][aria-description='Coming soon!']").hover
+      assert_selector "[role='tooltip']", text: "Coming soon!"
       assert_no_selector "a[data-turbo-frame='drawer']", visible: true
       find('[data-providers-filter-target="card"]', text: "Apple Wallet").native.save_screenshot(
         Rails.root.join("tmp", "apple-wallet-available.png"))
