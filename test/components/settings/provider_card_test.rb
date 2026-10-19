@@ -17,7 +17,9 @@ class Settings::ProviderCardTest < ViewComponent::TestCase
       external_link: { text: "Provider website", href: nil, tooltip: "Setup unavailable" }))
 
     assert_selector "button[disabled]", text: "Provider website"
-    assert_selector "[title='Setup unavailable'][tabindex='0'][aria-description='Setup unavailable']"
+    assert_selector "[data-controller='DS--tooltip'] [tabindex='0'][aria-description='Setup unavailable'] button[disabled]"
+    assert_selector "[data-controller='DS--tooltip'] [role='tooltip']", text: "Setup unavailable", visible: :all
+    assert_no_selector "[title]"
     assert_no_selector "a"
   end
 
