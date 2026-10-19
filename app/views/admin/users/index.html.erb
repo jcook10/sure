@@ -337,7 +337,7 @@
           <div class="flex items-center justify-between gap-4 rounded-lg border border-primary p-3">
             <div>
               <p class="font-medium text-primary"><%= block.identity_label %></p>
-              <p class="text-sm text-secondary"><%= block.provider %> · <%= l(block.created_at, format: :long) %></p>
+              <p class="text-sm text-secondary"><%= block.provider %> <span aria-hidden="true"><%= t("shared.dot_separator") %></span> <%= l(block.created_at, format: :long) %></p>
             </div>
             <%= form_with url: admin_sso_identity_block_path(block), method: :delete do %>
               <%= render DS::Button.new(
