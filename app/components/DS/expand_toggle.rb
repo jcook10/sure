@@ -25,26 +25,41 @@
 # (e.g. `account_sidebar_expand_all:` / `balance_sheet_expand_all:`). It is
 # passed as `true` so Rails renders a bare `data-...` attribute; a `nil`
 # value would be dropped by the tag helper and break the selector.
+#
+# `variant:` picks the chrome.
+#   :outline (default) — bordered square for toolbars such as the account
+#     sidebar, where it sits next to an outlined "New" button.
+#   :ghost — borderless 24px square with a 14px icon, matching the other
+#     icon buttons in a dashboard section header's hover cluster.
 class DS::ExpandToggle < DesignSystemComponent
   # Shared icon-only outline style. The button is a compact square: centered
   # icon, 8px padding (32px total with the 16px icon), the same border and
   # background as the previous labelled button. The sidebar call site appends
   # `shrink-0` so the button does not compress next to the flex-1 "New" link.
   DEFAULT_CLASSES = "inline-flex items-center justify-center rounded-lg border border-primary bg-container p-2 text-primary hover:bg-surface-inset transition-colors"
+  GHOST_CLASSES = "flex items-center justify-center w-6 h-6 rounded-md text-secondary hover:text-primary hover:bg-container-inset-hover transition-colors"
+  VARIANTS = %i[outline ghost].freeze
 
-  attr_reader :expand_label, :collapse_label, :data, :extra_classes
+  attr_reader :expand_label, :collapse_label, :data, :extra_classes, :variant
 
-  def initialize(expand_label:, collapse_label:, data:, class_name: nil)
+  def initialize(expand_label:, collapse_label:, data:, class_name: nil, variant: :outline)
     @expand_label = expand_label
     @collapse_label = collapse_label
     @data = data
     @extra_classes = class_name
+    @variant = variant.to_sym
+
+    raise ArgumentError, "variant: must be one of #{VARIANTS.inspect}" unless VARIANTS.include?(@variant)
+  end
+
+  def icon_classes
+    "!w-3.5 !h-3.5" if variant == :ghost
   end
 
   def merged_opts
     {
       type: "button",
-      class: class_names(DEFAULT_CLASSES, extra_classes),
+      class: class_names(variant == :ghost ? GHOST_CLASSES : DEFAULT_CLASSES, extra_classes),
       data: data.merge(expand_label: expand_label, collapse_label: collapse_label),
       aria: { expanded: false, label: expand_label }
     }
