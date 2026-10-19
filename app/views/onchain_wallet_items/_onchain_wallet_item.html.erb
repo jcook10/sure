@@ -7,7 +7,7 @@
         </div>
         <div class="min-w-0">
           <p class="font-medium text-primary truncate">
-            <%= accounts.first.chain_label %> · <%= accounts.first.truncated_address %>
+            <%= accounts.first.chain_label %> <span aria-hidden="true"><%= t("shared.dot_separator") %></span> <%= accounts.first.truncated_address %>
           </p>
           <p class="text-xs text-secondary">
             <% if onchain_wallet_item.syncing? %>

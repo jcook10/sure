@@ -407,7 +407,7 @@
                 <div class="sm:col-span-2 lg:col-span-3">
                   <dt class="text-secondary"><%= t("admin.system_health.show.ai.labels.failure_reason") %></dt>
                   <dd class="mt-1 font-medium text-destructive">
-                    <%= result.failure_codes.map { |code| t("admin.system_health.show.ai.failure_codes.#{code}") }.join(" · ") %>
+                    <%= result.failure_codes.map { |code| t("admin.system_health.show.ai.failure_codes.#{code}") }.join(" #{t("shared.dot_separator")} ") %>
                   </dd>
                 </div>
               <% end %>
@@ -430,11 +430,11 @@
     <p><%= t("admin.system_health.show.ai.local_setup.description") %></p>
     <p>
       <code class="rounded bg-container-inset px-1.5 py-0.5">VECTOR_STORE_PROVIDER=pgvector</code>
-      <span aria-hidden="true">·</span>
+      <span aria-hidden="true"><%= t("shared.dot_separator") %></span>
       <code class="rounded bg-container-inset px-1.5 py-0.5">EMBEDDING_URI_BASE</code>
-      <span aria-hidden="true">·</span>
+      <span aria-hidden="true"><%= t("shared.dot_separator") %></span>
       <code class="rounded bg-container-inset px-1.5 py-0.5">EMBEDDING_MODEL</code>
-      <span aria-hidden="true">·</span>
+      <span aria-hidden="true"><%= t("shared.dot_separator") %></span>
       <code class="rounded bg-container-inset px-1.5 py-0.5">EMBEDDING_DIMENSIONS</code>
     </p>
   <% end %>
