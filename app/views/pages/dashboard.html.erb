@@ -116,7 +116,7 @@
   <% if accessible_accounts.any? %>
     <% @dashboard_sections.each do |section| %>
       <section
-        class="bg-container rounded-xl shadow-border-xs transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2<%= " 2xl:col-span-2" if two_column && section[:layout][:col_span] == "full" %>"
+        class="bg-container rounded-xl shadow-border-xs transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2<%= " 2xl:col-span-2" if two_column && section[:layout][:col_span] == "full" %>"
         style="<%= "--dash-widget-h: #{section[:layout][:height_px]}px;" if section[:layout][:grow] %>"
         data-dashboard-sortable-target="section"
         data-section-key="<%= section[:key] %>"
@@ -194,16 +194,20 @@
             <% layout = section[:layout] %>
             <% show_width = layout[:width_toggle] && two_column %>
             <% if layout[:grow] || show_width %>
-              <details
-                class="relative hidden lg:block"
-                data-controller="dashboard-widget-size"
-                data-dashboard-widget-size-section-key-value="<%= section[:key] %>"
-                data-action="keydown->dashboard-widget-size#stopKeydown">
-                <summary
-                  class="focus-ring list-none cursor-pointer flex items-center justify-center w-6 h-6 rounded-md text-secondary hover:text-primary hover:bg-container-inset-hover transition-colors opacity-0 group-hover:opacity-100 [&::-webkit-details-marker]:hidden"
-                  aria-label="<%= t("pages.dashboard.widget_size.label") %>">
+              <%= render DS::Disclosure.new(
+                    variant: :bare,
+                    class: "relative hidden lg:block",
+                    summary_aria_label: t("pages.dashboard.widget_size.label"),
+                    summary_class: "focus-ring list-none cursor-pointer flex items-center justify-center w-6 h-6 rounded-md text-secondary hover:text-primary hover:bg-container-inset-hover transition-colors opacity-0 group-hover:opacity-100 [&::-webkit-details-marker]:hidden",
+                    data: {
+                      controller: "dashboard-widget-size",
+                      dashboard_widget_size_section_key_value: section[:key],
+                      action: "keydown->dashboard-widget-size#stopKeydown"
+                    }
+                  ) do |disclosure| %>
+                <% disclosure.with_summary_content do %>
                   <%= icon("sliders-horizontal", size: "sm", class: "!w-3.5 !h-3.5") %>
-                </summary>
+                <% end %>
                 <div class="absolute right-0 top-full mt-1.5 z-10 w-48 p-2.5 space-y-2.5 bg-surface rounded-xl shadow-border-xs border border-primary">
                   <% if show_width %>
                     <div class="space-y-1.5">
@@ -240,7 +244,7 @@
                     </div>
                   <% end %>
                 </div>
-              </details>
+              <% end %>
             <% end %>
             <%# A grab surface, not a button — clicking it does nothing. It keeps
                 cursor-grab and the colour shift, and deliberately skips the hover
