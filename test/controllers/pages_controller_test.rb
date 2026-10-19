@@ -21,6 +21,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#netWorthChart[data-time-series-chart-selectable-value='true'][draggable='false']"
   end
 
+  test "dashboard renders the widget size picker as a DS::Disclosure wired to its controller" do
+    get root_path
+
+    assert_response :ok
+    assert_select "section[data-section-key] details.group.relative[data-controller='dashboard-widget-size']" \
+                  "[data-dashboard-widget-size-section-key-value][data-action='keydown->dashboard-widget-size#stopKeydown']" do
+      assert_select "summary.focus-ring[aria-label='#{I18n.t("pages.dashboard.widget_size.label")}']"
+    end
+  end
+
   test "dashboard has no chat sidebar or toggle when the assistant type is mcp_only" do
     get root_path
     assert_select "#chat-container", count: 1
